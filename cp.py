@@ -1,78 +1,85 @@
+
 import numpy as np
 import pandas as pd
 
-def funcion1(matrizJT):
-
-    contador=0
-    for linea in matrizJT:
-        linea[0]= "identificacion"
-        linea[8]="forma de pago"
-        linea[9] = "casado"
-        linea[11] = "negocio propio"
-        linea[10] = "trabaja con dependencia"
-        linea[12] = "ingresos"
-        linea[13] = "edad"
-        linea[14] = "sexo"
-        linea[15] = "vehiculo propio"
-        linea[16] = "casa propio"
-
-        if "identificacion"== "cedula":
+def funcion1(dataFrameJT): #funcion que va a analizar el dataframe de Joel Torres
+    numeroFilas=dataFrameJT.shape[1]  # variable que me va a dar el numero de filas
+    puntaje=0 #puntaje que al inicio obviamente es 0
+    for i in range(0,numeroFilas+1): # recorro las filas n veces, comenzando por el indice 0 hasta el indice n
+        contador=0 # un contador que comienza en 0
+        primeraFila=dataFrameJT.ix[i:i+1] # comienza la lectura de la primera fila, luego segunda, luego tercera, etc etc...
+        listaDeListaFilas=primeraFila.values #esta variable me lanza una lista con otra lista donde esta la n fila
+        listaDeFila=listaDeListaFilas[0] # me devuelve la n fila en una sola lista
+        identificacion=listaDeFila[0] # sacando parametros
+        formaPago = listaDeFila[8]
+        casado = listaDeFila[9]
+        trabajaConDependencia = listaDeFila[10]
+        negocioPropio = listaDeFila[11]
+        ingresos = listaDeFila[12]
+        edad = listaDeFila[13]
+        sexo = listaDeFila[14]
+        vehiculoPropio = listaDeFila[15]
+        casaPropia = listaDeFila[16]
+        if identificacion=="C" : # Comienzo a poner mis condiciones
             contador= contador+5
-        elif "identificacion"== "RUC":
+        if identificacion=="R":
             contador= contador +10
-        elif "forma de pago" == "tarjeta":
+        if formaPago == "TARJETA":
             contador= contador+10
-        elif "forma de pago" == "banco" and "forma de pago" == "ahorros":
-            contador= contador + 5
-        elif "forma de pago" == "banco" and "forma de pago" == "corriente":
-            contador= contador+ 10
-        elif "forma de pago" == "cooperativa":
-            contador=contador+5
-        elif "casado"== True:
+        if formaPago == "BANCO" :
+            contador= contador + 10
+        if formaPago == "COOPERATIVA":
+            contador= contador+ 5
+        if casado=="S":
             contador= contador +10
-        elif "casado"== False:
+        if casado== "N":
             contador= contador+5
-        elif "negocio propio"== True:
+        if negocioPropio== "S":
             contador= contador +10
-        elif "negocio propio"== False:
+        if negocioPropio == "N":
             contador = contador+5
-        elif "ingresos">=374 and "ingresos"<=500:
+        if ingresos >=374 and ingresos<=500:
             contador = contador+5
-        elif "ingresos">501 and "ingresos"<=700:
+        if ingresos>501 and ingresos<=700:
             contador= contador + 7
-        elif "ingresos">701 and "ingresos"<=900:
+        if ingresos>701 and ingresos<=900:
             contador= contador +9
-        elif "ingresos">=901
+        if ingresos>=901:
             contador= contador+10
-        elif "sexo"=="masculino":
+        if sexo=="M":
             contador= contador+5
-        elif "sexo"== "femenino":
+        if sexo== "F":
             contador=contador+10
-        elif "vehiculo"==True:
+        if vehiculoPropio=="S":
             contador= contador+10
-        elif "vehiculo"==False:
+        if vehiculoPropio=="N":
             contador=contador+5
-        elif "casa propia"==True:
+        if casaPropia=="S":
             contador= contador +10
-        elif "casa propia"== False:
+        if casaPropia =="N":
             contador= contador+5
-        elif "edad">=18 and "edad"<=25:
+        if edad>=18 and edad<=25:
             contador=contador+4
-        elif "edad">=26 and "edad"<=30:
+        if edad>=26 and edad<=30:
             contador=contador+5
-        elif "edad">=31 and "edad"<=35:
+        if edad>=31 and edad<=35:
             contador=contador+7
-        elif "edad">=36 and "edad"<=40:
+        if edad>=36 and edad<=40:
             contador=contador+9
-        elif "edad">=41:
+        if edad>=41:
             contador=contador+10
-        elif "trabaja con dependencia"== True:
+        if trabajaConDependencia== "S":
             contador=contador+10
-        elif "trabaja con dependencia"== True:
+        if trabajaConDependencia== "N":
             contador=contador+5
+        if identificacion=="P":
+            contador=contador+0
 
-        puntajeTotal= contador
-        matrizJT[17]= puntajeTotal
+        puntaje= contador # hago que el puntaje se actualize al valor del puntaje que analizamos (del 0 al 100)
+    dataFrameJT["PUNTAJE"]=puntaje # creo una nueva columna en el dataFrame con los puntajes respectiva
+    return(dataFrameJT) # devuelvo el dataframe con una columna extra donde va a estar los puntajes
+
+
 
 
 

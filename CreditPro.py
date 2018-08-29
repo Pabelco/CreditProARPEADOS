@@ -1,10 +1,12 @@
 #CreditPro
+import os
+
 from unipath import Path
 from pandas import ExcelWriter
 from openpyxl import load_workbook
 import pandas.io.formats.excel
 import pandas as pd
-import numpy as np
+import openpyxl
 def matrizBases(file_list):   #Función de la matriz, list_file son las direcciones de las bases de datos.
     matrices = []
     dic_princ = []
@@ -227,9 +229,13 @@ def matrizBases(file_list):   #Función de la matriz, list_file son las direccio
 #dataFrameJT= matrizBases(["prueba matriz.xlsx","prueba matriz2.xlsx","prueba matriz3.xlsx"])
 #print(dataFrameJT)
 
-def funcionPuntajes(dataFrameJT): #funcion que va a analizar el dataframe de Joel Torres
-    numeroFilas=dataFrameJT.shape[1]  # variable que me va a dar el numero de filas
-    puntaje=[]
+def funcionPuntajes(dataFrameJT,lista_param): #funcion que va a analizar el dataframe de Joel Torres
+    #defaultlistaparam = [5,10,0,10,10,5,10,5,10,5,5,7,9,10,5,10,10,5,10,5,4,5,7,9,10,10,5]
+    numeroFilas = dataFrameJT.shape[1]  # variable que me va a dar el numero de filas
+    puntaje = []
+    lista_param_numerica= lista_param
+
+
     for i in range(0,numeroFilas+1): # recorro las filas n veces, comenzando por el indice 0 hasta el indice n
         listaConteo=[] # un contador que comienza en 0
         listaParametros=[]
@@ -248,90 +254,207 @@ def funcionPuntajes(dataFrameJT): #funcion que va a analizar el dataframe de Joe
             vehiculoPropio = listaDeFila[15]
             casaPropia = listaDeFila[16]
             if identificacion=="C" : # Comienzo a poner mis condiciones
-                listaConteo.append(5)
+                if lista_param_numerica[0]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[0])
             if identificacion=="R":
-                listaConteo.append(10)
+                if lista_param_numerica[1]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[1])
             if identificacion=="P":
-                listaConteo.append(0)
+                if lista_param_numerica[2]==None:
+                    listaConteo.append(0)
+                else:
+                    listaConteo.append(lista_param_numerica[2])
             if formaPago == "TARJETA":
-                listaConteo.append(10)
+                if lista_param_numerica[3]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[3])
             if formaPago == "BANCO":
-                listaConteo.append(10)
+                if lista_param_numerica[4]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[4])
+                #listaConteo.append(10)
             if formaPago == "COOPERATIVA":
-                listaConteo.append(5)
+                if lista_param_numerica[5]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[5])
+                #listaConteo.append(5)
             if casado == "S":
-                listaConteo.append(10)
+                if lista_param_numerica[6]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[6])
+                #listaConteo.append(10)
             if casado == "N":
-                listaConteo.append(5)
+                if lista_param_numerica[7]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[7])
+                #listaConteo.append(5)
             if negocioPropio == "S":
-                listaConteo.append(10)
+                if lista_param_numerica[8]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[8])
+                #listaConteo.append(10)
             if negocioPropio == "N":
-                listaConteo.append(5)
+                if lista_param_numerica[9]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[9])
+                #listaConteo.append(5)
             if ingresos >= 374 and ingresos <= 500:
-                listaConteo.append(5)
+                if lista_param_numerica[10]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[10])
+                #listaConteo.append(5)
             if ingresos >= 501 and ingresos <= 700:
-                listaConteo.append(7)
+                if lista_param_numerica[11]==None:
+                    listaConteo.append(7)
+                else:
+                    listaConteo.append(lista_param_numerica[11])
+                #listaConteo.append(7)
             if ingresos >= 701 and ingresos <= 900:
-                listaConteo.append(9)
+                if lista_param_numerica[12]==None:
+                    listaConteo.append(9)
+                else:
+                    listaConteo.append(lista_param_numerica[12])
+                #listaConteo.append(9)
             if ingresos >= 901:
-                listaConteo.append(10)
+                if lista_param_numerica[13]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[13])
+                #listaConteo.append(10)
             if sexo == "M":
-                listaConteo.append(5)
+                if lista_param_numerica[14]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[14])
+                #listaConteo.append(5)
             if sexo == "F":
-                listaConteo.append(10)
+                if lista_param_numerica[15]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[15])
+                #listaConteo.append(10)
             if vehiculoPropio == "S":
-                listaConteo.append(10)
+                if lista_param_numerica[16]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[16])
+                #listaConteo.append(10)
             if vehiculoPropio == "N":
-                listaConteo.append(5)
+                if lista_param_numerica[17]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[17])
+                #listaConteo.append(5)
             if casaPropia == "S":
-                listaConteo.append(10)
+                if lista_param_numerica[18]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[7])
+                #listaConteo.append(10)
             if casaPropia == "N":
-                listaConteo.append(5)
+                if lista_param_numerica[19]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[19])
+                #listaConteo.append(5)
             if edad >= 18 and edad <= 25:
-                listaConteo.append(4)
+                if lista_param_numerica[20]==None:
+                    listaConteo.append(4)
+                else:
+                    listaConteo.append(lista_param_numerica[20])
+                #listaConteo.append(4)
             if edad >= 26 and edad <= 30:
-                listaConteo.append(5)
+                if lista_param_numerica[21]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[21])
+                #listaConteo.append(5)
             if edad >= 31 and edad <= 35:
-                listaConteo.append(7)
+                if lista_param_numerica[22]==None:
+                    listaConteo.append(7)
+                else:
+                    listaConteo.append(lista_param_numerica[22])
+                #listaConteo.append(7)
             if edad >= 36 and edad <= 40:
-                listaConteo.append(9)
+                if lista_param_numerica[23]==None:
+                    listaConteo.append(9)
+                else:
+                    listaConteo.append(lista_param_numerica[23])
+                #listaConteo.append(9)
             if edad >= 41:
-                listaConteo.append(10)
+                if lista_param_numerica[24]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[24])
+                #listaConteo.append(10)
             if trabajaConDependencia == "S":
-                listaConteo.append(10)
+                if lista_param_numerica[25]==None:
+                    listaConteo.append(10)
+                else:
+                    listaConteo.append(lista_param_numerica[25])
+                #listaConteo.append(10)
             if trabajaConDependencia == "N":
-                listaConteo.append(5)
+                if lista_param_numerica[26]==None:
+                    listaConteo.append(5)
+                else:
+                    listaConteo.append(lista_param_numerica[26])
+                #listaConteo.append(5)
 
         contador=0
-        for j in listaConteo:
+        listaConteoNum = [int(x) for x in listaConteo]
+        for j in listaConteoNum:
             contador=contador+j
         puntaje.append(contador)  # hago que el puntaje se actualize al valor del puntaje que analizamos (del 0 al 100)
     dataFrameJT['PUNTAJE'] = pd.Series(puntaje)
     dataFrameFinal= dataFrameJT
-    return(dataFrameFinal) # devuelvo el dataframe con una columna extra donde va a estar los puntajes
+    tupla=dataFrameFinal.shape
+    numerof=tupla[0]
+    listaderetorno=[dataFrameFinal,numerof]
+    return(listaderetorno) # devuelvo el dataframe con una columna extra donde va a estar los puntajes
 #print(funcionPuntajes(dataFrameJT))
 
-def existsFile(dataFrameFinal,allpath):
-    my_file = Path(allpath+"\\"+'Archivo_Perfilado.xlsx')
-    if my_file.exists():
+def existsFile(listaderetorno,allPath):
+    dataFrameFinal=listaderetorno[0]
+    numeroFinalFilas=listaderetorno[1]
+    nuevopath=allPath + '\\' + 'Archivo_Perfilado.xlsx'
+    if os.path.exists(nuevopath):
         dFinal = dataFrameFinal
-        book = load_workbook('Archivo_Perfilado.xlsx')
-        writer = pd.ExcelWriter('Archivo_Perfilado.xlsx', engine='openpyxl')
+        book = openpyxl.load_workbook(nuevopath)
+        writer = pd.ExcelWriter(nuevopath, engine='openpyxl')
         writer.book = book
 
         pandas.io.formats.excel.header_style = None
 
         writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-        single_sheet = book.worksheets[0].title
-        end_sheet = single_sheet.get_highest_row()
-        dFinal.to_excel(writer, single_sheet, startrow = end_sheet+1, index=False )
+        ws=book.worksheets[0]
+        end_sheet = ws.max_row
+
+        dFinal.to_excel(writer, ws.title, startrow = end_sheet, index=False )
+        ws.delete_rows(end_sheet + 1)
         writer.save()
+        print("si") # no está entrando a esta opción
 
     else:
-        createFile(dataFrameFinal,allpath)
+        print("no") # siempre a esta opcion
+
+        createFile(dataFrameFinal,allPath)
 
 def createFile(dataFrameFinal,allpath):
-    dFinal = dataFrameFinal
+    print(dataFrameFinal[0])
+    dFinal = dataFrameFinal[0]
+
     writer = ExcelWriter(allpath+"\\"+'Archivo_Perfilado.xlsx')
     dFinal.to_excel(writer, 'Hoja de datos', index=False)
     writer.save()

@@ -441,8 +441,35 @@ def existsFile(listaderetorno,allPath):
         ws=book.worksheets[0]
         end_sheet = ws.max_row
 
-        dFinal.to_excel(writer, ws.title, startrow = end_sheet, index=False )
-        ws.delete_rows(end_sheet + 1)
+        #dFinal.to_excel(writer, ws.title, startrow = end_sheet, index=False )
+        #ws.delete_rows(end_sheet + 1)
+        for j in range(end_sheet):
+            print(dataFrameFinal["CEDULA - RUC"].to_dict())
+            if str(ws.cell((j+1),2).value) in dataFrameFinal["CEDULA - RUC"].to_dict().values():
+                    print("si hay match cedulas")
+                    serie_MU= list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
+                    for i in serie_MU:
+                        ws.cell(i+2, 1, dataFrameFinal.iat[i, 0])
+                        ws.cell(i+2, 2, dataFrameFinal.iat[i, 1])
+                        ws.cell(i+2, 3, dataFrameFinal.iat[i, 2])
+                        ws.cell(i+2, 4, dataFrameFinal.iat[i, 3])
+                        ws.cell(i+2, 5, dataFrameFinal.iat[i, 4])
+                        ws.cell(i+2, 6, dataFrameFinal.iat[i, 5])
+                        ws.cell(i+2, 7, dataFrameFinal.iat[i, 6])
+                        ws.cell(i+2, 8, dataFrameFinal.iat[i, 7])
+                        ws.cell(i+2, 9, dataFrameFinal.iat[i, 8])
+                        ws.cell(i+2, 10, dataFrameFinal.iat[i, 9])
+                        ws.cell(i+2, 11, dataFrameFinal.iat[i, 10])
+                        ws.cell(i+2, 12, dataFrameFinal.iat[i, 11])
+                        ws.cell(i+2, 13, dataFrameFinal.iat[i, 12])
+                        ws.cell(i+2, 14, dataFrameFinal.iat[i, 13])
+                        ws.cell(i+2, 15, dataFrameFinal.iat[i, 14])
+                        ws.cell(i+2, 16, dataFrameFinal.iat[i, 15])
+                        ws.cell(i+2, 17, dataFrameFinal.iat[i, 16])
+                        ws.cell(i+2, 18, dataFrameFinal.iat[i, 17])
+                    dModified = dFinal.drop(dFinal[dFinal["CEDULA - RUC"]!= ws.cell((j+1),2).value].index)
+                    dModified.to_excel(writer, ws.title, startrow=end_sheet, index=False)
+                    ws.delete_rows(end_sheet+1)
         writer.save()
         print("si") # no está entrando a esta opción
 

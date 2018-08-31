@@ -38,7 +38,7 @@ def matrizBases(file_list):   #Función de la matriz, list_file son las direccio
                         else:                                                                   #Si tiene cualquier otra naturaleza, se dice que es un pasaporte.
                             lista_cedoruc.append('nan')                                         #Se agrega "NaN" que se refiere a que no lo reconoce o es incorrecto para la base.
 
-                matriz['TIPO DE IDENTIFICACION'] = lista_cedoruc                            #Una vez recorrido todo el archivo en esa columna, la lista "lista_cedoruc" con los datos sobre si es RUC, Cédula o pasaporte, se añade a la matriz principal en la columna "CEDULA - RUC".
+                matriz['TIPO DE IDENTIFICACION'] = lista_cedoruc                            #Una vez recorrido el archivo en esa columna, la lista "lista_cedoruc" con los datos sobre si es RUC, Cédula o pasaporte, se añade a la matriz principal en la columna "CEDULA - RUC".
             elif str(etiqueta).upper().startswith('NOM') or str(etiqueta).upper().startswith('APEL'): #Se pregunta si la etiqueta empieza con "NOM" de nombre o si empieza con "APEL" de apellido.
                 matriz['NOMBRE APELLIDO'] = columna_etiqueta                                #Si cumple la condición anterior, simplemente se añade toda esa columna de nombres y apellidos a la matriz principal en la columna "NOMBRE Y APELLIDO".
             elif str(etiqueta).upper().startswith('DIRE'):                                       #Se pregunta si la etiqueta empieza con "DIRE" de dirección, no se le agrego más de la palabra ya que podría generar un conflicto si tiene tilde o no en el documento que se está filtrando.
@@ -427,6 +427,7 @@ def funcionPuntajes(dataFrameJT,lista_param): #funcion que va a analizar el data
 
 def existsFile(listaderetorno,allPath):
     dataFrameFinal=listaderetorno[0]
+    dataFrameF = listaderetorno[0]
     numeroFinalFilas=listaderetorno[1]
     nuevopath=allPath + '\\' + 'Archivo_Perfilado.xlsx'
     if os.path.exists(nuevopath):
@@ -439,18 +440,25 @@ def existsFile(listaderetorno,allPath):
 
         writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
         ws=book.worksheets[0]
+        vs=book.worksheets[0]
         end_sheet = ws.max_row
 
-        #dFinal.to_excel(writer, ws.title, startrow = end_sheet, index=False )
-        #ws.delete_rows(end_sheet + 1)
+        # dFinal.to_excel(writer, ws.title, startrow = end_sheet, index=False )
+        # ws.delete_rows(end_sheet + 1)
+        serie_MU = list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
+        dic_df= dataFrameFinal["CEDULA - RUC"].to_dict()
+        #for i in serie_MU:
         for j in range(end_sheet):
-            print(dataFrameFinal["CEDULA - RUC"].to_dict())
-            if str(ws.cell((j+1),2).value) in dataFrameFinal["CEDULA - RUC"].to_dict().values():
-                    print("si hay match cedulas")
-                    serie_MU= list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
-                    for i in serie_MU:
+            #print(dataFrameFinal["CEDULA - RUC"].to_dict())
+            #serie_MU = list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
+            #for j in range(end_sheet):
+            for i in serie_MU:
+                if str(vs.cell((j+1),2).value) in dataFrameFinal["CEDULA - RUC"].to_dict().values():
+                        print("La cédula "+str(vs.cell((j+1),2).value)+" tiene match.")
+                    #serie_MU= list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
+                    #for i in serie_MU:
                         ws.cell(i+2, 1, dataFrameFinal.iat[i, 0])
-                        ws.cell(i+2, 2, dataFrameFinal.iat[i, 1])
+                        # ws.cell(i+2, 2, dataFrameFinal.iat[i, 1])
                         ws.cell(i+2, 3, dataFrameFinal.iat[i, 2])
                         ws.cell(i+2, 4, dataFrameFinal.iat[i, 3])
                         ws.cell(i+2, 5, dataFrameFinal.iat[i, 4])
@@ -467,9 +475,21 @@ def existsFile(listaderetorno,allPath):
                         ws.cell(i+2, 16, dataFrameFinal.iat[i, 15])
                         ws.cell(i+2, 17, dataFrameFinal.iat[i, 16])
                         ws.cell(i+2, 18, dataFrameFinal.iat[i, 17])
-                    dModified = dFinal.drop(dFinal[dFinal["CEDULA - RUC"]!= ws.cell((j+1),2).value].index)
-                    dModified.to_excel(writer, ws.title, startrow=end_sheet, index=False)
-                    ws.delete_rows(end_sheet+1)
+                        #print(dataFrameF)
+                        #dataFrameF = dFinal.drop(dFinal[dFinal["CEDULA - RUC"]!= vs.cell((j+1),2).value].index)
+                        #print(dataFrameF)
+                        #dataFrameF.to_excel(writer, ws.title, startrow=end_sheet, index=False)
+                        #ws.delete_rows(end_sheet+1)
+                #elif str(vs.cell((j+1),2).value) not in dataFrameFinal["CEDULA - RUC"].to_dict().values():
+                        if j in dic_df.keys():
+                            dataFrameF = dFinal.drop(dFinal[dFinal["CEDULA - RUC"] != dic_df[j]].index)
+                            print(dataFrameF)
+                            dataFrameF.to_excel(writer, ws.title, startrow=end_sheet, index=False)
+                            ws.delete_rows(end_sheet + 1)
+                else:
+                    dFinal.to_excel(writer, ws.title, startrow=end_sheet, index=False)
+                    ws.delete_rows(end_sheet + 1)
+
         writer.save()
         print("si") # no está entrando a esta opción
 

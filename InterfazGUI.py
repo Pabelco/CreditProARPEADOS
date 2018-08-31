@@ -559,6 +559,7 @@ if __name__ == "__main__":
     frame1 = PrimerVentana()
     frame1.Show()
 
+#Hasta que al fin
 
 
     app.MainLoop()

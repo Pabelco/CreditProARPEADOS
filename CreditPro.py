@@ -228,22 +228,33 @@ def matrizBases(file_list):   #Función de la matriz, list_file son las direccio
         return matriz_filtrada
 #dataFrameJT= matrizBases(["prueba matriz.xlsx","prueba matriz2.xlsx","prueba matriz3.xlsx"])
 #print(dataFrameJT)
+def parametrosDefault(curpath):
+    #print(curpath)
+    f=open(curpath+"\\"+"DATOS PREDETERMINADOS.txt","r")
+    for i in f:
+        separar=i.split(",")
+        return separar
 
-def funcionPuntajes(dataFrameJT,lista_param): #funcion que va a analizar el dataframe de Joel Torres
-    #defaultlistaparam = [5,10,0,10,10,5,10,5,10,5,5,7,9,10,5,10,10,5,10,5,4,5,7,9,10,10,5]
+def funcionPuntajes(dataFrameJT,lista_param,stringpath):
+    #funcion que va a analizar el dataframe de Joel Torres
+    #print(os.getcwd())
+    print(stringpath)
+    directorio=os.path.dirname(stringpath)
+    os.chdir(directorio)
+    print(os.getcwd())
+    # defaultlistaparam = [5,10,0,10,10,5,10,5,10,5,5,7,9,10,5,10,10,5,10,5,4,5,7,9,10,10,5]
     numeroFilas = dataFrameJT.shape[1]  # variable que me va a dar el numero de filas
     puntaje = []
-    lista_param_numerica= lista_param
+    lista_param_numerica = lista_param
+    listaParametros = parametrosDefault(directorio)
 
-
-    for i in range(0,numeroFilas+1): # recorro las filas n veces, comenzando por el indice 0 hasta el indice n
-        listaConteo=[] # un contador que comienza en 0
-        listaParametros=[]
-        nFila=dataFrameJT.ix[i:i] # comienza la lectura de la primera fila, luego segunda, luego tercera, etc etc...
-        listaDeListaDeFilas=nFila.values
-        for k in  listaDeListaDeFilas:
-            listaDeFila= k
-            identificacion=listaDeFila[0]  # sacando parametros
+    for i in range(0, numeroFilas + 1):  # recorro las filas n veces, comenzando por el indice 0 hasta el indice n
+        listaConteo = []  # un contador que comienza en 0
+        nFila = dataFrameJT.ix[i:i]  # comienza la lectura de la primera fila, luego segunda, luego tercera, etc etc...
+        listaDeListaDeFilas = nFila.values
+        for k in listaDeListaDeFilas:
+            listaDeFila = k
+            identificacion = listaDeFila[0]  # sacando parametros
             formaPago = listaDeFila[8]
             casado = listaDeFila[9]
             trabajaConDependencia = listaDeFila[10]
@@ -253,177 +264,178 @@ def funcionPuntajes(dataFrameJT,lista_param): #funcion que va a analizar el data
             sexo = listaDeFila[14]
             vehiculoPropio = listaDeFila[15]
             casaPropia = listaDeFila[16]
-            if identificacion=="C" : # Comienzo a poner mis condiciones
-                if lista_param_numerica[0]==None:
-                    listaConteo.append(5)
+            if identificacion == "C":  # Comienzo a poner mis condiciones
+                if lista_param_numerica[0] == None or lista_param_numerica[0].isnumeric()==False :
+                    #print("Se asigna por defecto")
+                    listaConteo.append(listaParametros[0])
                 else:
                     listaConteo.append(lista_param_numerica[0])
-            if identificacion=="R":
-                if lista_param_numerica[1]==None:
-                    listaConteo.append(10)
+            if identificacion == "R":
+                if lista_param_numerica[1] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[1])
                 else:
                     listaConteo.append(lista_param_numerica[1])
-            if identificacion=="P":
-                if lista_param_numerica[2]==None:
-                    listaConteo.append(0)
+            if identificacion == "P":
+                if lista_param_numerica[2] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[2])
                 else:
                     listaConteo.append(lista_param_numerica[2])
             if formaPago == "TARJETA":
-                if lista_param_numerica[3]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[3] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[3])
                 else:
                     listaConteo.append(lista_param_numerica[3])
             if formaPago == "BANCO":
-                if lista_param_numerica[4]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[4] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[4])
                 else:
                     listaConteo.append(lista_param_numerica[4])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if formaPago == "COOPERATIVA":
-                if lista_param_numerica[5]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[5] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[5])
                 else:
                     listaConteo.append(lista_param_numerica[5])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if casado == "S":
-                if lista_param_numerica[6]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[6] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[6])
                 else:
                     listaConteo.append(lista_param_numerica[6])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if casado == "N":
-                if lista_param_numerica[7]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[7] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[7])
                 else:
                     listaConteo.append(lista_param_numerica[7])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if negocioPropio == "S":
-                if lista_param_numerica[8]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[8] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[8])
                 else:
                     listaConteo.append(lista_param_numerica[8])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if negocioPropio == "N":
-                if lista_param_numerica[9]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[9] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[9])
                 else:
                     listaConteo.append(lista_param_numerica[9])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if ingresos >= 374 and ingresos <= 500:
-                if lista_param_numerica[10]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[10] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[10])
                 else:
                     listaConteo.append(lista_param_numerica[10])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if ingresos >= 501 and ingresos <= 700:
-                if lista_param_numerica[11]==None:
-                    listaConteo.append(7)
+                if lista_param_numerica[11] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[11])
                 else:
                     listaConteo.append(lista_param_numerica[11])
-                #listaConteo.append(7)
+                # listaConteo.append(7)
             if ingresos >= 701 and ingresos <= 900:
-                if lista_param_numerica[12]==None:
-                    listaConteo.append(9)
+                if lista_param_numerica[12] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[12])
                 else:
                     listaConteo.append(lista_param_numerica[12])
-                #listaConteo.append(9)
+                # listaConteo.append(9)
             if ingresos >= 901:
-                if lista_param_numerica[13]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[13] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[13])
                 else:
                     listaConteo.append(lista_param_numerica[13])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if sexo == "M":
-                if lista_param_numerica[14]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[14] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[14])
                 else:
                     listaConteo.append(lista_param_numerica[14])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if sexo == "F":
-                if lista_param_numerica[15]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[15] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[15])
                 else:
                     listaConteo.append(lista_param_numerica[15])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if vehiculoPropio == "S":
-                if lista_param_numerica[16]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[16] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[16])
                 else:
                     listaConteo.append(lista_param_numerica[16])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if vehiculoPropio == "N":
-                if lista_param_numerica[17]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[17] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[17])
                 else:
                     listaConteo.append(lista_param_numerica[17])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if casaPropia == "S":
-                if lista_param_numerica[18]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[18] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[18])
                 else:
                     listaConteo.append(lista_param_numerica[7])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if casaPropia == "N":
-                if lista_param_numerica[19]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[19] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[19])
                 else:
                     listaConteo.append(lista_param_numerica[19])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if edad >= 18 and edad <= 25:
-                if lista_param_numerica[20]==None:
-                    listaConteo.append(4)
+                if lista_param_numerica[20] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[20])
                 else:
                     listaConteo.append(lista_param_numerica[20])
-                #listaConteo.append(4)
+                # listaConteo.append(4)
             if edad >= 26 and edad <= 30:
-                if lista_param_numerica[21]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[21] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[21])
                 else:
                     listaConteo.append(lista_param_numerica[21])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
             if edad >= 31 and edad <= 35:
-                if lista_param_numerica[22]==None:
-                    listaConteo.append(7)
+                if lista_param_numerica[22] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[22])
                 else:
                     listaConteo.append(lista_param_numerica[22])
-                #listaConteo.append(7)
+                # listaConteo.append(7)
             if edad >= 36 and edad <= 40:
-                if lista_param_numerica[23]==None:
-                    listaConteo.append(9)
+                if lista_param_numerica[23] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[23])
                 else:
                     listaConteo.append(lista_param_numerica[23])
-                #listaConteo.append(9)
+                # listaConteo.append(9)
             if edad >= 41:
-                if lista_param_numerica[24]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[24] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[24])
                 else:
                     listaConteo.append(lista_param_numerica[24])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if trabajaConDependencia == "S":
-                if lista_param_numerica[25]==None:
-                    listaConteo.append(10)
+                if lista_param_numerica[25] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[25])
                 else:
                     listaConteo.append(lista_param_numerica[25])
-                #listaConteo.append(10)
+                # listaConteo.append(10)
             if trabajaConDependencia == "N":
-                if lista_param_numerica[26]==None:
-                    listaConteo.append(5)
+                if lista_param_numerica[26] == None or lista_param_numerica[0].isnumeric()==False:
+                    listaConteo.append(listaParametros[26])
                 else:
                     listaConteo.append(lista_param_numerica[26])
-                #listaConteo.append(5)
+                # listaConteo.append(5)
 
-        contador=0
+        contador = 0
         listaConteoNum = [int(x) for x in listaConteo]
         for j in listaConteoNum:
-            contador=contador+j
+            contador = contador + j
         puntaje.append(contador)  # hago que el puntaje se actualize al valor del puntaje que analizamos (del 0 al 100)
     dataFrameJT['PUNTAJE'] = pd.Series(puntaje)
-    dataFrameFinal= dataFrameJT
-    tupla=dataFrameFinal.shape
-    numerof=tupla[0]
-    listaderetorno=[dataFrameFinal,numerof]
-    return(listaderetorno) # devuelvo el dataframe con una columna extra donde va a estar los puntajes
-#print(funcionPuntajes(dataFrameJT))
+    dataFrameFinal = dataFrameJT
+    tupla = dataFrameFinal.shape
+    numerof = tupla[0]
+    listaderetorno = [dataFrameFinal, numerof]
+    return (listaderetorno)  # devuelvo el dataframe con una columna extra donde va a estar los puntajes
+# print(funcionPuntajes(dataFrameJT))
 
 def existsFile(listaderetorno,allPath):
     dataFrameFinal=listaderetorno[0]

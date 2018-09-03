@@ -491,14 +491,14 @@ def existsFile(listaderetorno,allPath):
                                 if str(ws.cell((j + 1), 2).value) != dataFrameF.iat[w,1]:
                                     dataFrameF.to_excel(writer, ws.title, startrow=end_sheet, index=False)
                                     ws.delete_rows(end_sheet + 1)
-                                    writer.save()
-                                    nuevo_max=ws.max_row
-                                    print(nuevo_max)
-                                    ws.delete_rows(nuevo_max)
+                                    #writer.save()
+                                    #nuevo_max=ws.max_row
+                                    #print(nuevo_max)
+                                    #ws.delete_rows(nuevo_max)
                 elif str(vs.cell((j+1),2).value) not in dataFrameFinal["CEDULA - RUC"].to_dict().values() and comprobacion==False:
                     dFinal.to_excel(writer, ws.title, startrow=end_sheet, index=False)
                     ws.delete_rows(end_sheet + 1)
-        print(nuevo_max)
+        #print(nuevo_max)
         writer.save()
 
         print("si") # no está entrando a esta opción

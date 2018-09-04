@@ -33,8 +33,10 @@ def matrizBases(file_list):   #Función de la matriz, list_file son las direccio
                             lista_cedoruc.append('R')                                           #Si los tiene, se agrega "R" de RUC a la lista "lista_cedoruc".
                         elif str(cedoruc).endswith('001'):                                      #Pregunta si termina en 001 para hacer otra validación sobre el RUC.
                             lista_cedoruc.append('R')                                           #Si no tiene 13 caracteres pero termina en 001, se considera RUC y se añade "R" de RUC a la lista.
-                        elif len(str(cedoruc)) == 7:                                            #Si tiene 7 caracteres.
+                        #elif len(str(cedoruc)) == 7 :                                            #Si tiene 7 caracteres.
+                        elif str(cedoruc).split('-')[0].isalpha() and str(cedoruc).split('-')[1].isnumeric():
                             lista_cedoruc.append('P')                                           #Por tanto, aquí se agrega la "P" de pasaporte en la lista "lista_cedoruc"
+
                         else:                                                                   #Si tiene cualquier otra naturaleza, se dice que es un pasaporte.
                             lista_cedoruc.append('nan')                                         #Se agrega "NaN" que se refiere a que no lo reconoce o es incorrecto para la base.
 
@@ -483,6 +485,7 @@ def existsFile(listaderetorno,allPath):
                         ws.cell(i+2, 11, dataFrameFinal.iat[i, 10])
                         ws.cell(i+2, 12, dataFrameFinal.iat[i, 11])
                         ws.cell(i+2, 13, dataFrameFinal.iat[i, 12])
+                        #if dataFrameFinal.iat[i, 13] != "nan" or dataFrameFinal.iat[i, 13] != "":
                         ws.cell(i+2, 14, dataFrameFinal.iat[i, 13])
                         ws.cell(i+2, 15, dataFrameFinal.iat[i, 14])
                         ws.cell(i+2, 16, dataFrameFinal.iat[i, 15])
@@ -512,7 +515,12 @@ def existsFile(listaderetorno,allPath):
                     ws.delete_rows(end_sheet + 1)
         #print(nuevo_max)
         writer.save()
-
+        print(ws.max_row)
+        #for g in range(ws.max_row):
+        #for m in dataFrameF["CEDULA - RUC"].to_dict().values():
+            #if str(ws.cell((ws.max_row),2).value) == m:
+                #ws.delete_rows(ws.max_row)
+                #writer.save()
         print("si") # no está entrando a esta opción
 
     else:

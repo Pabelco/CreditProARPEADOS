@@ -516,6 +516,7 @@ def existsFile(listaderetorno,allPath):
         #print(nuevo_max)
         writer.save()
         print(ws.max_row)
+        #FIX
         #for g in range(ws.max_row):
         #for m in dataFrameF["CEDULA - RUC"].to_dict().values():
             #if str(ws.cell((ws.max_row),2).value) == m:

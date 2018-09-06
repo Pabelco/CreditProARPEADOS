@@ -468,7 +468,7 @@ def existsFile(listaderetorno,allPath):
             #serie_MU = list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
             #for j in range(end_sheet):
             for i in serie_MU:
-                if str(vs.cell((j+1),2).value) in dataFrameFinal["CEDULA - RUC"].to_dict().values():
+                if str(ws.cell((j+1),2).value) in dataFrameFinal["CEDULA - RUC"].to_dict().values():
                         print("La cédula "+str(vs.cell((j+1),2).value)+" tiene match.")
                     #serie_MU= list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
                     #for i in serie_MU:
@@ -485,8 +485,8 @@ def existsFile(listaderetorno,allPath):
                         ws.cell(i+2, 11, dataFrameFinal.iat[i, 10])
                         ws.cell(i+2, 12, dataFrameFinal.iat[i, 11])
                         ws.cell(i+2, 13, dataFrameFinal.iat[i, 12])
-                        #if dataFrameFinal.iat[i, 13] != "nan" or dataFrameFinal.iat[i, 13] != "":
-                        ws.cell(i+2, 14, dataFrameFinal.iat[i, 13])
+                        if str(dataFrameFinal.iat[1,13]).isnumeric()==True:
+                            ws.cell(i+2, 14, dataFrameFinal.iat[i, 13])
                         ws.cell(i+2, 15, dataFrameFinal.iat[i, 14])
                         ws.cell(i+2, 16, dataFrameFinal.iat[i, 15])
                         ws.cell(i+2, 17, dataFrameFinal.iat[i, 16])
@@ -506,7 +506,7 @@ def existsFile(listaderetorno,allPath):
                                 if str(ws.cell((j + 1), 2).value) != dataFrameF.iat[w,1]:
                                     dataFrameF.to_excel(writer, ws.title, startrow=end_sheet, index=False)
                                     ws.delete_rows(end_sheet + 1)
-                                    #writer.save()
+                                    #writer.save
                                     #nuevo_max=ws.max_row
                                     #print(nuevo_max)
                                     #ws.delete_rows(nuevo_max)
@@ -516,6 +516,20 @@ def existsFile(listaderetorno,allPath):
         #print(nuevo_max)
         writer.save()
         print(ws.max_row)
+        if ws.max_row > end_sheet:
+            print(end_sheet)
+            dfdefinitivo=pd.read_excel(nuevopath)
+            print(dfdefinitivo)
+            dicComprbCED = dfdefinitivo["CEDULA - RUC"].to_dict()
+            comprbCED=list(dfdefinitivo["CEDULA - RUC"].to_dict().keys())
+            listarecortada=comprbCED[end_sheet-1:]
+            print(listarecortada)
+            #print(dataFrameFinal)
+            for c in listarecortada:
+                if dicComprbCED[c] in dataFrameFinal["CEDULA - RUC"].to_dict().values():
+                    ws.delete_rows(c+2)
+            writer.save()
+
         #FIX
         #for g in range(ws.max_row):
         #for m in dataFrameF["CEDULA - RUC"].to_dict().values():

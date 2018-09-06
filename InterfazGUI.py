@@ -24,7 +24,7 @@ class Mywin(wx.Frame):
         #icon = wx.Icon()
         #icon.CopyFromBitmap(wx.Bitmap("ARPEADOS.jpeg", wx.BITMAP_TYPE_JPEG))
         #self.SetIcon(icon)
-        self.currentDirectory = os.getcwd()
+        self.currentDirectory = os.path.abspath("InterfazGUI.py")
         panel = wx.Panel(self, wx.ID_ANY)
         vbox = wx.BoxSizer(wx.VERTICAL)
 
@@ -273,9 +273,12 @@ class Mywin(wx.Frame):
         saveParametros.Bind(wx.EVT_BUTTON, self.guardarCambiosdeParametros)
         discardParametros = wx.Button(panel, label="Cancelar", pos=(1, 1), size=(120, 60), style=0)
         discardParametros.Bind(wx.EVT_BUTTON, self.cancelarCambiosdeParametros)
+        #mostrarParámetrosAnteriores = wx.Button(panel, label="Cancelar", pos=(1, 1), size=(120, 60), style=0)
+        #mostrarParámetrosAnteriores.Bind(wx.EVT_BUTTON, self.revisarParametros())
 
         hbox11.Add(saveParametros)
         hbox11.Add(discardParametros)
+        #hbox11.Add(mostrarParámetrosAnteriores)
         vbox.Add(hbox11,1,wx.EXPAND | wx.ALIGN_CENTER | wx.ALL,5)
 
         panel.SetSizer(vbox)
@@ -284,6 +287,8 @@ class Mywin(wx.Frame):
         self.Show()
         self.Fit()
 
+    def revisarParametros(self,event):
+        pass
 
     def cancelarCambiosdeParametros(self,event):
         (print("Se canceló"))
@@ -295,7 +300,7 @@ class Mywin(wx.Frame):
                   None, None, None, None,
                   None, None, None]
         global arre
-        arre = cp.funcionPuntajes(arreglo_bruto,lista_parametros1)
+        arre = cp.funcionPuntajes(arreglo_bruto,lista_parametros1,stringpath)
         self.Close()
 
     def guardarCambiosdeParametros(self,event):
@@ -305,7 +310,7 @@ class Mywin(wx.Frame):
         list_lista_parametros.append(lista_parametros)
         global arre
         #arre = cp.funcionPuntajes(arreglo_bruto, list_lista_parametros[0])
-        arre = cp.funcionPuntajes(arreglo_bruto, lista_parametros)
+        arre = cp.funcionPuntajes(arreglo_bruto, lista_parametros,stringpath)
         self.Close()
 
     def OnKeyTyped(self, event):
@@ -403,8 +408,12 @@ class PrimerVentana(wx.Frame):
 
         panel = wx.Panel(self, wx.ID_ANY)
         panel.SetBackgroundColour("#c9faff")
-
-        self.currentDirectory = os.getcwd()
+        global stringpath
+        stringpath=os.path.abspath("InterfazGUI.py")
+        global direct
+        direct= os.path.dirname(stringpath)
+        print(stringpath)
+        self.currentDirectory = os.path.abspath("InterfazGUI.py")
         # create the buttons and bindings
 
         global saveFileDlgBtn
@@ -482,7 +491,7 @@ class PrimerVentana(wx.Frame):
                   None, None, None, None,
                   None, None, None]
                     global arre
-                    arre= cp.funcionPuntajes(arreglo_bruto,lista_cancel)
+                    arre= cp.funcionPuntajes(arreglo_bruto,lista_cancel,stringpath)
 
 
                     #print(arr)

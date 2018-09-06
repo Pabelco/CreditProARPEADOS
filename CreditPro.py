@@ -1,12 +1,14 @@
 #CreditPro
 import os
 
+from openpyxl.styles import PatternFill
 from unipath import Path
 from pandas import ExcelWriter
 from openpyxl import load_workbook
 import pandas.io.formats.excel
 import pandas as pd
 import openpyxl
+
 def matrizBases(file_list):   #Función de la matriz, list_file son las direcciones de las bases de datos.
     matrices = []
     dic_princ = []
@@ -444,6 +446,19 @@ def existsFile(listaderetorno,allPath):
     dataFrameF = listaderetorno[0]
     numeroFinalFilas=listaderetorno[1]
     nuevopath=allPath + '\\' + 'Archivo_Perfilado.xlsx'
+    dataFrameActual=pd.read_excel(nuevopath)
+    cambioFill = PatternFill(start_color='FFFB89',
+                          end_color='FFFB89',
+                          fill_type='solid')
+    nocambioFill = PatternFill(start_color='FFFFFF',
+                             end_color='FFFFFF',
+                             fill_type='solid')
+    cambioFillPuntaje = PatternFill(start_color='FF6666',
+                               end_color='FF6666',
+                               fill_type='solid')
+    cambioFillPuntajeUp = PatternFill(start_color='8EFFB4',
+                                    end_color='8EFFB4',
+                                    fill_type='solid')
     if os.path.exists(nuevopath):
         dFinal = dataFrameFinal
         book = openpyxl.load_workbook(nuevopath)
@@ -457,46 +472,108 @@ def existsFile(listaderetorno,allPath):
         vs=book.worksheets[0]
         end_sheet = ws.max_row
 
-        # dFinal.to_excel(writer, ws.title, startrow = end_sheet, index=False )
-        # ws.delete_rows(end_sheet + 1)
         serie_MU = list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
         dic_df= dataFrameFinal["CEDULA - RUC"].to_dict()
-        #for i in serie_MU:
         comprobacion=False
         for j in range(end_sheet):
-            #print(dataFrameFinal["CEDULA - RUC"].to_dict())
-            #serie_MU = list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
-            #for j in range(end_sheet):
             for i in serie_MU:
                 if str(ws.cell((j+1),2).value) in dataFrameFinal["CEDULA - RUC"].to_dict().values():
                         print("La cédula "+str(vs.cell((j+1),2).value)+" tiene match.")
-                    #serie_MU= list(dataFrameFinal['CEDULA - RUC'].to_dict().keys())
-                    #for i in serie_MU:
                         ws.cell(i+2, 1, dataFrameFinal.iat[i, 0])
-                        # ws.cell(i+2, 2, dataFrameFinal.iat[i, 1])
-                        # ws.cell(i+2, 3, dataFrameFinal.iat[i, 2])
+                        # ws.cell(i+2, 2, dataFrameFinal.iat[i, 1]) INCAMBIABLES
+                        # ws.cell(i+2, 3, dataFrameFinal.iat[i, 2]) INCAMBIABLES
                         ws.cell(i+2, 4, dataFrameFinal.iat[i, 3])
                         ws.cell(i+2, 5, dataFrameFinal.iat[i, 4])
                         ws.cell(i+2, 6, dataFrameFinal.iat[i, 5])
                         ws.cell(i+2, 7, dataFrameFinal.iat[i, 6])
-                        ws.cell(i+2, 8, dataFrameFinal.iat[i, 7])
-                        ws.cell(i+2, 9, dataFrameFinal.iat[i, 8])
-                        ws.cell(i+2, 10, dataFrameFinal.iat[i, 9])
-                        ws.cell(i+2, 11, dataFrameFinal.iat[i, 10])
-                        ws.cell(i+2, 12, dataFrameFinal.iat[i, 11])
-                        ws.cell(i+2, 13, dataFrameFinal.iat[i, 12])
-                        if str(dataFrameFinal.iat[1,13]).isnumeric()==True:
-                            ws.cell(i+2, 14, dataFrameFinal.iat[i, 13])
-                        ws.cell(i+2, 15, dataFrameFinal.iat[i, 14])
-                        ws.cell(i+2, 16, dataFrameFinal.iat[i, 15])
-                        ws.cell(i+2, 17, dataFrameFinal.iat[i, 16])
-                        ws.cell(i+2, 18, dataFrameFinal.iat[i, 17])
-                        #print(dataFrameF)
-                        #dataFrameF = dFinal.drop(dFinal[dFinal["CEDULA - RUC"]!= vs.cell((j+1),2).value].index)
-                        #print(dataFrameF)
-                        #dataFrameF.to_excel(writer, ws.title, startrow=end_sheet, index=False)
-                        #ws.delete_rows(end_sheet+1)
-                #elif str(vs.cell((j+1),2).value) not in dataFrameFinal["CEDULA - RUC"].to_dict().values():
+                        if str(dataFrameFinal.iat[1, 7]).isnumeric() == True:
+                            nomcelda = "H" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 7]:
+                                ws.cell(i + 2, 8, dataFrameFinal.iat[i, 7])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                            #ws.cell(i+2, 8, dataFrameFinal.iat[i, 7])
+                        if str(dataFrameFinal.iat[1, 8]) == "BANCO" or str(dataFrameFinal.iat[1, 8]) == "TARJETA" or str(dataFrameFinal.iat[1, 8]) == "COOPERATIVA":
+                            nomcelda = "I" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 8]:
+                                ws.cell(i + 2, 9, dataFrameFinal.iat[i, 8])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                            #ws.cell(i+2, 9, dataFrameFinal.iat[i, 8])
+                        if str(dataFrameFinal.iat[1, 9]) == "S" or str(dataFrameFinal.iat[1, 9]) == "N":
+                            nomcelda = "J" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 9]:
+                                ws.cell(i + 2, 10, dataFrameFinal.iat[i, 9])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                            #ws.cell(i+2, 10, dataFrameFinal.iat[i, 9])
+                        if str(dataFrameFinal.iat[1, 10]) == "S" or str(dataFrameFinal.iat[1, 10]) == "N":
+                            nomcelda = "K" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 10]:
+                                ws.cell(i + 2, 11, dataFrameFinal.iat[i, 10])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                        if str(dataFrameFinal.iat[1, 11]) == "S" or str(dataFrameFinal.iat[1, 11]) == "N":
+                            nomcelda = "L" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 11]:
+                                ws.cell(i + 2, 12, dataFrameFinal.iat[i, 11])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                        if str(dataFrameFinal.iat[1, 12]).isnumeric() == True:
+                            nomcelda = "M" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 12]:
+                                ws.cell(i + 2, 13, dataFrameFinal.iat[i, 12])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                        if str(dataFrameFinal.iat[1, 13]).isnumeric() == True:
+                            nomcelda="N"+str(i+2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 13]:
+                                ws.cell(i + 2, 14, dataFrameFinal.iat[i, 13])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                        if str(dataFrameFinal.iat[1, 14]) == "M" or str(dataFrameFinal.iat[1, 14]) == "F":
+                            nomcelda = "O" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 14]:
+                                ws.cell(i + 2, 15, dataFrameFinal.iat[i, 14])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                            #ws.cell(i+2, 15, dataFrameFinal.iat[i, 14])
+                        if str(dataFrameFinal.iat[1, 15]) == "S" or str(dataFrameFinal.iat[1, 15]) == "N":
+                            nomcelda = "P" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 15]:
+                                ws.cell(i + 2, 16, dataFrameFinal.iat[i, 15])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                            #ws.cell(i+2, 16, dataFrameFinal.iat[i, 15])
+                        if str(dataFrameFinal.iat[1, 16]) == "S" or str(dataFrameFinal.iat[1, 16]) == "N":
+                            nomcelda = "Q" + str(i + 2)
+                            if ws[nomcelda].value != dataFrameFinal.iat[i, 16]:
+                                ws.cell(i + 2, 17, dataFrameFinal.iat[i, 16])
+                                ws[nomcelda].fill = cambioFill
+                            #else:
+                                #ws[nomcelda].fill = nocambioFill
+                            #ws.cell(i+2, 17, dataFrameFinal.iat[i, 16])
+                        nomceldaPuntaje = "R" + str(i + 2)
+                        if int(ws[nomceldaPuntaje].value) > int(dataFrameFinal.iat[i, 17]):
+                            ws.cell(i + 2, 18, dataFrameFinal.iat[i, 17])
+                            ws[nomceldaPuntaje].fill = cambioFillPuntaje
+                        #elif int(ws[nomceldaPuntaje].value) < int(dataFrameFinal.iat[i, 17]):
+                        else:
+                            ws.cell(i + 2, 18, dataFrameFinal.iat[i, 17])
+                            ws[nomceldaPuntaje].fill = cambioFillPuntajeUp
+                        #else:
+                            #ws[nomceldaPuntaje].fill = nocambioFill
+                        #ws.cell(i+2, 18, dataFrameFinal.iat[i, 17])
+
                         if j in dic_df.keys():
                             dataFrameF = dFinal.drop(dFinal[dFinal["CEDULA - RUC"] != dic_df[j]].index)
                             print(dataFrameF)
@@ -506,17 +583,12 @@ def existsFile(listaderetorno,allPath):
                                 if str(ws.cell((j + 1), 2).value) != dataFrameF.iat[w,1]:
                                     dataFrameF.to_excel(writer, ws.title, startrow=end_sheet, index=False)
                                     ws.delete_rows(end_sheet + 1)
-                                    #writer.save
-                                    #nuevo_max=ws.max_row
-                                    #print(nuevo_max)
-                                    #ws.delete_rows(nuevo_max)
                 elif str(vs.cell((j+1),2).value) not in dataFrameFinal["CEDULA - RUC"].to_dict().values() and comprobacion==False:
                     dFinal.to_excel(writer, ws.title, startrow=end_sheet, index=False)
                     ws.delete_rows(end_sheet + 1)
-        #print(nuevo_max)
         writer.save()
         print(ws.max_row)
-        if ws.max_row > end_sheet:
+        if ws.max_row > end_sheet :
             print(end_sheet)
             dfdefinitivo=pd.read_excel(nuevopath)
             print(dfdefinitivo)
@@ -526,16 +598,13 @@ def existsFile(listaderetorno,allPath):
             print(listarecortada)
             #print(dataFrameFinal)
             for c in listarecortada:
-                if dicComprbCED[c] in dataFrameFinal["CEDULA - RUC"].to_dict().values():
+                print(dicComprbCED[c])
+                if dicComprbCED[c] in dataFrameActual["CEDULA - RUC"].to_dict().values():
+                    print(dataFrameActual)
                     ws.delete_rows(c+2)
-            writer.save()
 
-        #FIX
-        #for g in range(ws.max_row):
-        #for m in dataFrameF["CEDULA - RUC"].to_dict().values():
-            #if str(ws.cell((ws.max_row),2).value) == m:
-                #ws.delete_rows(ws.max_row)
-                #writer.save()
+        writer.save()
+
         print("si") # no está entrando a esta opción
 
     else:

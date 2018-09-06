@@ -453,7 +453,7 @@ def existsFile(listaderetorno,allPath):
     nocambioFill = PatternFill(start_color='FFFFFF',
                              end_color='FFFFFF',
                              fill_type='solid')
-    cambioFillPuntaje = PatternFill(start_color='FF6666',
+    cambioFillPuntajeDown = PatternFill(start_color='FF6666',
                                end_color='FF6666',
                                fill_type='solid')
     cambioFillPuntajeUp = PatternFill(start_color='8EFFB4',
@@ -565,8 +565,7 @@ def existsFile(listaderetorno,allPath):
                         nomceldaPuntaje = "R" + str(i + 2)
                         if int(ws[nomceldaPuntaje].value) > int(dataFrameFinal.iat[i, 17]):
                             ws.cell(i + 2, 18, dataFrameFinal.iat[i, 17])
-                            ws[nomceldaPuntaje].fill = cambioFillPuntaje
-                        #elif int(ws[nomceldaPuntaje].value) < int(dataFrameFinal.iat[i, 17]):
+                            ws[nomceldaPuntaje].fill = cambioFillPuntajeDown
                         else:
                             ws.cell(i + 2, 18, dataFrameFinal.iat[i, 17])
                             ws[nomceldaPuntaje].fill = cambioFillPuntajeUp

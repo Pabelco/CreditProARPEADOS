@@ -9,6 +9,19 @@ import pandas.io.formats.excel
 import pandas as pd
 import openpyxl
 
+cambioFill = PatternFill(start_color='91F9FF',
+                         end_color='91F9FF',
+                         fill_type='solid')
+cambioFillPuntajeMid = PatternFill(start_color='FFFB89',
+                                   end_color='FFFB89',
+                                   fill_type='solid')
+cambioFillPuntajeDown = PatternFill(start_color='FF6666',
+                                    end_color='FF6666',
+                                    fill_type='solid')
+cambioFillPuntajeUp = PatternFill(start_color='8EFFB4',
+                                  end_color='8EFFB4',
+                                  fill_type='solid')
+
 def matrizBases(file_list):   #Función de la matriz, list_file son las direcciones de las bases de datos.
     matrices = []
     dic_princ = []
@@ -242,12 +255,12 @@ def parametrosDefault(curpath):
 def funcionPuntajes(dataFrameJT,lista_param,stringpath):
     #funcion que va a analizar el dataframe de Joel Torres
     #print(os.getcwd())
-    print(stringpath)
+    #print(stringpath)
     directorio=os.path.dirname(stringpath)
     os.chdir(directorio)
     print(os.getcwd())
     # defaultlistaparam = [5,10,0,10,10,5,10,5,10,5,5,7,9,10,5,10,10,5,10,5,4,5,7,9,10,10,5]
-    numeroFilas = dataFrameJT.shape[1]  # variable que me va a dar el numero de filas
+    numeroFilas = dataFrameJT.shape[0]  # variable que me va a dar el numero de filas
     puntaje = []
     lista_param_numerica = lista_param
     listaParametros = parametrosDefault(directorio)
@@ -325,7 +338,9 @@ def funcionPuntajes(dataFrameJT,lista_param,stringpath):
                 else:
                     listaConteo.append(lista_param_numerica[9])
                 # listaConteo.append(5)
-            if ingresos >= 374 and ingresos <= 500:
+            if ingresos < 386:
+                    listaConteo.append(0)
+            if ingresos >= 386 and ingresos <= 500:
                 if lista_param_numerica[10] == None or lista_param_numerica[0].isnumeric()==False:
                     listaConteo.append(listaParametros[10])
                 else:
@@ -427,12 +442,13 @@ def funcionPuntajes(dataFrameJT,lista_param,stringpath):
                 else:
                     listaConteo.append(lista_param_numerica[26])
                 # listaConteo.append(5)
-
+        #print(listaConteo)
         contador = 0
         listaConteoNum = [int(x) for x in listaConteo]
         for j in listaConteoNum:
             contador = contador + j
         puntaje.append(contador)  # hago que el puntaje se actualize al valor del puntaje que analizamos (del 0 al 100)
+    #print(puntaje)
     dataFrameJT['PUNTAJE'] = pd.Series(puntaje)
     dataFrameFinal = dataFrameJT
     tupla = dataFrameFinal.shape
@@ -447,11 +463,12 @@ def existsFile(listaderetorno,allPath):
     numeroFinalFilas=listaderetorno[1]
     nuevopath=allPath + '\\' + 'Archivo_Perfilado.xlsx'
     dataFrameActual=pd.read_excel(nuevopath)
+    """
     cambioFill = PatternFill(start_color='FFFB89',
                           end_color='FFFB89',
                           fill_type='solid')
-    nocambioFill = PatternFill(start_color='FFFFFF',
-                             end_color='FFFFFF',
+    cambioFillPuntajeMid = PatternFill(start_color='FFFB89',
+                             end_color='FFFB89',
                              fill_type='solid')
     cambioFillPuntajeDown = PatternFill(start_color='FF6666',
                                end_color='FF6666',
@@ -459,6 +476,7 @@ def existsFile(listaderetorno,allPath):
     cambioFillPuntajeUp = PatternFill(start_color='8EFFB4',
                                     end_color='8EFFB4',
                                     fill_type='solid')
+    """
     if os.path.exists(nuevopath):
         dFinal = dataFrameFinal
         book = openpyxl.load_workbook(nuevopath)
@@ -481,6 +499,13 @@ def existsFile(listaderetorno,allPath):
                         print("La cédula "+str(vs.cell((j+1),2).value)+" tiene match.")
                         ws.cell(i+2, 1, dataFrameFinal.iat[i, 0])
                         # ws.cell(i+2, 2, dataFrameFinal.iat[i, 1]) INCAMBIABLES
+                        nomceldaPuntaje = "R" + str(i + 2)
+                        nomceldaNombre = "C" + str(i + 2 )
+                        if int(ws[nomceldaPuntaje].value) < int(dataFrameFinal.iat[i, 17]):
+                            ws[nomceldaNombre].fill = cambioFillPuntajeUp
+                        elif int(ws[nomceldaPuntaje].value) > int(dataFrameFinal.iat[i, 17]):
+                            ws[nomceldaNombre].fill = cambioFillPuntajeDown
+
                         # ws.cell(i+2, 3, dataFrameFinal.iat[i, 2]) INCAMBIABLES
                         ws.cell(i+2, 4, dataFrameFinal.iat[i, 3])
                         ws.cell(i+2, 5, dataFrameFinal.iat[i, 4])
@@ -559,19 +584,9 @@ def existsFile(listaderetorno,allPath):
                             if ws[nomcelda].value != dataFrameFinal.iat[i, 16]:
                                 ws.cell(i + 2, 17, dataFrameFinal.iat[i, 16])
                                 ws[nomcelda].fill = cambioFill
-                            #else:
-                                #ws[nomcelda].fill = nocambioFill
-                            #ws.cell(i+2, 17, dataFrameFinal.iat[i, 16])
-                        nomceldaPuntaje = "R" + str(i + 2)
-                        if int(ws[nomceldaPuntaje].value) > int(dataFrameFinal.iat[i, 17]):
-                            ws.cell(i + 2, 18, dataFrameFinal.iat[i, 17])
-                            ws[nomceldaPuntaje].fill = cambioFillPuntajeDown
-                        else:
-                            ws.cell(i + 2, 18, dataFrameFinal.iat[i, 17])
-                            ws[nomceldaPuntaje].fill = cambioFillPuntajeUp
-                        #else:
-                            #ws[nomceldaPuntaje].fill = nocambioFill
-                        #ws.cell(i+2, 18, dataFrameFinal.iat[i, 17])
+
+
+                        ws.cell(i + 2, 18, dataFrameFinal.iat[i, 17])
 
                         if j in dic_df.keys():
                             dataFrameF = dFinal.drop(dFinal[dFinal["CEDULA - RUC"] != dic_df[j]].index)
@@ -586,9 +601,9 @@ def existsFile(listaderetorno,allPath):
                     dFinal.to_excel(writer, ws.title, startrow=end_sheet, index=False)
                     ws.delete_rows(end_sheet + 1)
         writer.save()
-        print(ws.max_row)
+        #print(ws.max_row)
         if ws.max_row > end_sheet :
-            print(end_sheet)
+            #print(end_sheet)
             dfdefinitivo=pd.read_excel(nuevopath)
             print(dfdefinitivo)
             dicComprbCED = dfdefinitivo["CEDULA - RUC"].to_dict()
@@ -603,7 +618,16 @@ def existsFile(listaderetorno,allPath):
                     ws.delete_rows(c+2)
 
         writer.save()
+        for i in range(ws.max_row-1):
+            colorpuntaje="R"+str(i+2)
+            if int(ws[colorpuntaje].value)>=75:
+                ws[colorpuntaje].fill=cambioFillPuntajeUp
+            elif int(ws[colorpuntaje].value) < 75 and int(ws[colorpuntaje].value) >= 50:
+                ws[colorpuntaje].fill=cambioFillPuntajeMid
+            else:
+                ws[colorpuntaje].fill=cambioFillPuntajeDown
 
+        writer.save()
         print("si") # no está entrando a esta opción
 
     else:
@@ -617,4 +641,53 @@ def createFile(dataFrameFinal,allpath):
 
     writer = ExcelWriter(allpath+"\\"+'Archivo_Perfilado.xlsx')
     dFinal.to_excel(writer, 'Hoja de datos', index=False)
+
+    writer.save()
+
+    book = openpyxl.load_workbook(allpath+"\\"+'Archivo_Perfilado.xlsx')
+    writer.book = book
+
+    pandas.io.formats.excel.header_style = None
+
+    writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+    ws = book.worksheets[0]
+    """
+    dims = {}
+    for row in ws.rows:
+        for cell in row:
+            if cell.value:
+                dims[cell.column] = max((dims.get(cell.column, 0), len(str(cell.value))))
+    for col, value in dims.items():
+        ws.column_dimensions[col].width = value
+    """
+    ws.column_dimensions["A"].width = 6.29
+    ws.column_dimensions["B"].width = 12.86
+    ws.column_dimensions["C"].width = 16.34
+    ws.column_dimensions["D"].width = 10
+    ws.column_dimensions["E"].width = 6.56
+    ws.column_dimensions["F"].width = 11
+    ws.column_dimensions["G"].width = 10
+    ws.column_dimensions["H"].width = 9
+    ws.column_dimensions["I"].width = 16
+    ws.column_dimensions["J"].width = 8
+    ws.column_dimensions["K"].width = 8.43
+    ws.column_dimensions["L"].width = 16.43
+    ws.column_dimensions["M"].width = 8.86
+    ws.column_dimensions["N"].width = 5
+    ws.column_dimensions["O"].width = 5
+    ws.column_dimensions["P"].width = 11.14
+    ws.column_dimensions["Q"].width = 6.57
+
+    writer.save()
+
+    for i in range(ws.max_row-1):
+        colorpuntaje = "R" + str(i + 2)
+        #print(colorpuntaje)
+        if int(ws[colorpuntaje].value) >= 75:
+            ws[colorpuntaje].fill=cambioFillPuntajeUp
+        elif int(ws[colorpuntaje].value) < 75 and int(ws[colorpuntaje].value) >= 50:
+            ws[colorpuntaje].fill=cambioFillPuntajeMid
+        else:
+            ws[colorpuntaje].fill=cambioFillPuntajeDown
+
     writer.save()

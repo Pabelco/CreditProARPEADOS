@@ -1,7 +1,6 @@
 import time
 import os
 import wx
-
 from wx.lib.pubsub import pub
 from threading import Thread
 import CreditPro as cp
@@ -17,6 +16,70 @@ lista_parametros = [None, None, None, None,
                   None, None, None]
 global list_lista_parametros
 list_lista_parametros=[]
+
+class Win(wx.Frame):
+    def __init__(self, parent):
+        super(Win, self).__init__(parent, title="CreditPRO    Su perfilador de archivos", size=(400, 150))
+        # icon = wx.Icon()
+        # icon.CopyFromBitmap(wx.Bitmap("ARPEADOS.jpeg", wx.BITMAP_TYPE_JPEG))
+        # self.SetIcon(icon)
+        self.currentDirectory = os.path.abspath("InterfazGUI.py")
+        panel = wx.Panel(self, wx.ID_ANY)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        l1 = wx.StaticText(panel, -1, "Ingrese Código de Autenticidad:")
+        hbox1.Add(l1, 1, wx.EXPAND | wx.ALIGN_LEFT | wx.ALL, 5)
+
+        self.t1 = wx.TextCtrl(panel)
+        self.t1.Bind(wx.EVT_TEXT, self.OnKeyTyped1)
+
+        hbox1.Add(self.t1, 1, wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, 5)
+        vbox.Add(hbox1)
+
+        confirmacion = wx.Button(panel, label="Acceder", pos =(0,0),size=(60, 50),
+                                                style=0)
+        confirmacion.Bind(wx.EVT_BUTTON, self.elegirelementosPerfil)
+
+        grid = wx.GridSizer(1, 0, 0)
+        grid.Add(confirmacion, 0, wx.ALIGN_CENTRE, 5)
+
+        vbox.Add(grid, 1, wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, 5)
+        panel.SetSizer(vbox)
+
+        self.Centre()
+        self.Show()
+        self.Fit()
+
+    def elegirelementosPerfil(self,event):
+        if contrasena == "ivanf":
+            print("Código correcto")
+            #Implementar
+
+        else:
+            print("Código incorrecto")
+            error=self.onFailAcces()
+            error.ShowModal()
+
+    def OnKeyTyped1(self, event):
+        global contrasena
+        contrasena= event.GetString()
+        print(contrasena)
+
+    def onFailAcces(self):
+        """
+        This method is fired when its corresponding button is pressed
+        """
+        dlg = self.showMessageDlg1("Código incorrecto","Acceso denegado", wx.OK | wx.ICON_ERROR)
+        return dlg
+
+    def showMessageDlg1(self, msg, title, style):
+        """"""
+        dlg = wx.MessageDialog(parent=None, message=msg,
+                                   caption=title, style=style)
+        return dlg
+        dlg.ShowModal()
+        dlg.Destroy()
 
 class Mywin(wx.Frame):
     def __init__(self, parent):
@@ -54,7 +117,7 @@ class Mywin(wx.Frame):
         l41 = wx.StaticText(panel, -1, "SI:")
         l42 = wx.StaticText(panel, -1, "NO:")
         l5 = wx.StaticText(panel, -1, "Ingresos:")
-        l51 = wx.StaticText(panel, -1, "De 374 a 500:")
+        l51 = wx.StaticText(panel, -1, "De 386 a 500:")
         l52 = wx.StaticText(panel, -1, "De 501 a 700:")
         l53 = wx.StaticText(panel, -1, "De 701 a 900:")
         l54 = wx.StaticText(panel, -1, "Mayor a 900:")
@@ -273,12 +336,12 @@ class Mywin(wx.Frame):
         saveParametros.Bind(wx.EVT_BUTTON, self.guardarCambiosdeParametros)
         discardParametros = wx.Button(panel, label="Cancelar", pos=(1, 1), size=(120, 60), style=0)
         discardParametros.Bind(wx.EVT_BUTTON, self.cancelarCambiosdeParametros)
-        #mostrarParámetrosAnteriores = wx.Button(panel, label="Cancelar", pos=(1, 1), size=(120, 60), style=0)
-        #mostrarParámetrosAnteriores.Bind(wx.EVT_BUTTON, self.revisarParametros())
+        #cambiarParámetrosAnteriores = wx.Button(panel, label="Modificar parámetros", pos=(1, 1), size=(120, 60), style=0)
+        #cambiarParámetrosAnteriores.Bind(wx.EVT_BUTTON, self.refactorParametros)
 
         hbox11.Add(saveParametros)
         hbox11.Add(discardParametros)
-        #hbox11.Add(mostrarParámetrosAnteriores)
+        #hbox11.Add(cambiarParámetrosAnteriores)
         vbox.Add(hbox11,1,wx.EXPAND | wx.ALIGN_CENTER | wx.ALL,5)
 
         panel.SetSizer(vbox)
@@ -287,8 +350,8 @@ class Mywin(wx.Frame):
         self.Show()
         self.Fit()
 
-    def revisarParametros(self,event):
-        pass
+    def refactorParametros(self,event):
+        Win(None)
 
     def cancelarCambiosdeParametros(self,event):
         (print("Se canceló"))
